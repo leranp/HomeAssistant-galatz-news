@@ -1,0 +1,5 @@
+{
+    "name": "galatz_news",
+    "render_readme": true,
+    "homeassistant": "2023.8.3"
+}
