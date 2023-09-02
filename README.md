@@ -2,7 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
 
-![alt text]([https://www.tami4.co.il/sites/default/files/2021-04/edge%2B_white_left_552x820.png](https://upload.wikimedia.org/wikipedia/he/thumb/3/30/GaltzLogo.svg/1200px-GaltzLogo.svg.png))
+![alt text]((https://upload.wikimedia.org/wikipedia/he/thumb/3/30/GaltzLogo.svg/1200px-GaltzLogo.svg.png))
 
 
 ## Installation
