@@ -1,0 +1,6 @@
+play_galatz_news:
+  name: Play the Galatz lastest hourly news
+  description: Choose media player and start the Galatz lastest hourly news
+  target:
+    entity:
+      domain: media_player
