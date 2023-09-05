@@ -1,6 +1,9 @@
 # HomeAssistant integration for getting the lastest hour news of Galatz Radio station
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/custom-components/hacs)
+[![](https://img.shields.io/github/release/leranp/galatz-news/all.svg?style=for-the-badge)](https://github.com/leranp/HomeAssistant-galatz-news/releases)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![](https://img.shields.io/badge/MAINTAINER-%40leranp-red?style=for-the-badge)](https://github.com/leranp)
+[![](https://img.shields.io/badge/COMMUNITY-FORUM-success?style=for-the-badge)](https://community.home-assistant.io)
 
 ![alt text](https://upload.wikimedia.org/wikipedia/he/thumb/3/30/GaltzLogo.svg/1200px-GaltzLogo.svg.png)
 
