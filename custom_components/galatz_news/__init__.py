@@ -6,7 +6,7 @@ import os
 
 DOMAIN = "galatz_news"
 
-def setup(hass, config):
+def setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Set up is called when Home Assistant is loading our component."""
 
     def play_galatz_news_service(call):
