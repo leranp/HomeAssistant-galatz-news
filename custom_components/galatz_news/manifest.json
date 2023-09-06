@@ -6,5 +6,5 @@
     "issue_tracker": "https://github.com/leranp/HomeAssistant-galatz-news/issues",
     "iot_class": "cloud_polling",
     "codeowners": ["@leranp"],
-    "version": "1.0"
+    "version": "1.0.0"
 }
