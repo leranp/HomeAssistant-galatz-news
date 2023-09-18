@@ -33,7 +33,7 @@ def setup(hass, config):
         else:
             HourFix = Hour
             
-        _LOGGER.error(HourFix)
+        #_LOGGER.error(HourFix)
         
         Format = Year + month + Day + "-" + str(HourFix)
 
@@ -55,11 +55,11 @@ def setup(hass, config):
         elif "mp3" in GetUrl:
                 words = GetUrl.split("mp3")[0]
                 UrlMp3 = words + "mp3"
-                _LOGGER.error(UrlMp3)
+                #_LOGGER.error(UrlMp3)
                 
-                _LOGGER.error(media_player_entity_id)
+                #_LOGGER.error(media_player_entity_id)
                 service_data = {"entity_id":media_player_entity_id,"media_content_id":UrlMp3,"media_content_type":"music"}
-                _LOGGER.error(service_data)
+                #_LOGGER.error(service_data)
                 hass.services.call('media_player', 'play_media', service_data)
 
     hass.services.register(DOMAIN, "play_galatz_news", play_galatz_news_service)
