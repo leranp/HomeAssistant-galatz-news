@@ -1,4 +1,4 @@
-# HomeAssistant integration for getting the lastest hour news of Galatz Radio station
+# HomeAssistant integration for getting the latest hour news of Galatz Radio station
 
 [![](https://img.shields.io/github/release/leranp/galatz-news/all.svg?style=for-the-badge)](https://github.com/leranp/HomeAssistant-galatz-news/releases)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
@@ -21,7 +21,7 @@ The component requires configuration via the Home Assistant configuration file. 
 ## Services
 
 The following service are implemented by the component:
-- `play_galatz_news` - enable you to play the lastest hour news of Galatz Radio station in the media player that you choose
+- `play_galatz_news` - enable you to play the latest hour news of Galatz Radio station in the media player that you choose
 
 ### Disclaimer
 I don't have any contact with the company and am not responsible for any loss or damage caused by this integration.
