@@ -1,5 +1,6 @@
 {
     "name": "galatz_news",
+    "country": "IL",
     "render_readme": true,
     "homeassistant": "2023.7.0"
 }
