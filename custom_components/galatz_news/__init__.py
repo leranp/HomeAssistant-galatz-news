@@ -110,8 +110,7 @@ def setup(hass, config):
         except AttributeError:
             entryId = "not_found"
             hour = "not_found"
-
-        _LOGGER.error("No Url was found")
+            _LOGGER.error("No Url was found")
 
 
         # Create the Url for the next HTTP request
