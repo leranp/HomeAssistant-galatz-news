@@ -1,10 +1,7 @@
 import datetime
 import logging
-
+import random
 import requests
-
-# import os
-# import urllib
 
 
 DOMAIN = "galatz_news"
