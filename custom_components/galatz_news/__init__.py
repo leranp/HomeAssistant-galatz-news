@@ -67,7 +67,7 @@ def setup(hass, config):
             # _LOGGER.error(service_data)
             hass.services.call("media_player", "play_media", service_data)
 
-    def play_galatz_news_service(call):
+    def play_kan_news_service(call):
         """Handle the service call."""
         media_player_entity_id = call.data.get("entity_id")
 
