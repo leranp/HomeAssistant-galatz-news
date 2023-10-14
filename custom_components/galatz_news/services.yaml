@@ -4,3 +4,9 @@ play_galatz_news:
   target:
     entity:
       domain: media_player
+play_kan_news:
+  name: Play the KAN latest hourly news
+  description: Choose media player and start the KAN latest hourly news
+  target:
+    entity:
+      domain: media_player
