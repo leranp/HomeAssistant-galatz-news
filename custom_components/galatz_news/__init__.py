@@ -2,7 +2,7 @@ import datetime
 import logging
 import random
 import requests
-
+import re
 
 DOMAIN = "galatz_news"
 
