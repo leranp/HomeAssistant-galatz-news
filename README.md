@@ -21,7 +21,9 @@ The component requires configuration via the Home Assistant configuration file. 
 ## Services
 
 The following service are implemented by the component:
-- `play_galatz_news` - enable you to play the latest hour news of Galatz Radio station in the media player that you choose
+- `play_galatz_news` - enable you to play the latest hour news of Galatz Radio station in the media player that you choosed
+- `play_kan_news` - enable you to play the latest hour news of KAN Radio station in the media player that you choosed
+
 
 ### Disclaimer
 I don't have any contact with the company and am not responsible for any loss or damage caused by this integration.
