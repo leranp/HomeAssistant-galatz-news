@@ -110,8 +110,6 @@ def setup(hass, config):
         except AttributeError:
             entryId = "not_found"
             hour = "not_found"
-            _LOGGER.error("No Url was found")
-
 
         # Create the Url for the next HTTP request
         Url = "https://cdnapisec.kaltura.com/html5/html5lib/v2.92/mwEmbedFrame.php/p/2717431/uiconf_id/47265863/entry_id/" + \
