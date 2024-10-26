@@ -5,7 +5,7 @@
 [![](https://img.shields.io/badge/MAINTAINER-%40leranp-red?style=for-the-badge)](https://github.com/leranp)
 [![](https://img.shields.io/badge/COMMUNITY-FORUM-success?style=for-the-badge)](https://community.home-assistant.io)
 
-![alt text](https://upload.wikimedia.org/wikipedia/he/thumb/3/30/GaltzLogo.svg/1200px-GaltzLogo.svg.png)
+![alt text](https://upload.wikimedia.org/wikipedia/commons/3/30/GaltzLogo.svg)
 
 
 ## Installation
