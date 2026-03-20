@@ -6,6 +6,7 @@
     "documentation": "https://github.com/leranp/HomeAssistant-galatz-news",
     "iot_class": "cloud_polling",
     "issue_tracker": "https://github.com/leranp/HomeAssistant-galatz-news/issues",
+    "dependencies": ["http"],
     "requirements": ["cloudscraper==1.2.71"],
     "version": "1.3.0"
 }

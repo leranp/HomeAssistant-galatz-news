@@ -7,10 +7,13 @@ import cloudscraper
 import httpx
 from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.network import get_url
 
 DOMAIN = "galatz_news"
 _LOGGER = logging.getLogger(__name__)
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 _kan_audio_buffer: bytes | None = None
 
