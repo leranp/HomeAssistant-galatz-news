@@ -14,13 +14,7 @@ Installation via [HACS](https://hacs.xyz/) (recommended) or by copying `custom_c
 
 ## Configuration
 
-Add the following to your `configuration.yaml`:
-
-```yaml
-galatz_news:
-```
-
-Then restart Home Assistant.
+After installation, add the integration via **Settings → Devices & Services → Add Integration** and search for **Galatz & KAN News**. No manual configuration required.
 
 ## Services
 
