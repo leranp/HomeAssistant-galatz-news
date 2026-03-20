@@ -2,7 +2,7 @@
     "domain": "galatz_news",
     "name": "Galatz lastest hourly news",
     "codeowners": ["@leranp"],
-    "config_flow": false,
+    "config_flow": true,
     "documentation": "https://github.com/leranp/HomeAssistant-galatz-news",
     "iot_class": "cloud_polling",
     "issue_tracker": "https://github.com/leranp/HomeAssistant-galatz-news/issues",

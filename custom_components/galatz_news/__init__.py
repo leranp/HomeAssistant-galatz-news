@@ -33,7 +33,11 @@ class KanNewsAudioView(HomeAssistantView):
 
 
 async def async_setup(hass, config):
-    """Set up the integration."""
+    return True
+
+
+async def async_setup_entry(hass, entry):
+    """Set up the integration from a config entry."""
     hass.http.register_view(KanNewsAudioView)
 
     async def play_galatz_news_service(call):
@@ -102,6 +106,13 @@ async def async_setup(hass, config):
     hass.services.async_register(DOMAIN, "play_galatz_news", play_galatz_news_service)
     hass.services.async_register(DOMAIN, "play_kan_news", play_kan_news_service)
 
+    return True
+
+
+async def async_unload_entry(hass, entry):
+    """Unload a config entry."""
+    hass.services.async_remove(DOMAIN, "play_galatz_news")
+    hass.services.async_remove(DOMAIN, "play_kan_news")
     return True
 
 
