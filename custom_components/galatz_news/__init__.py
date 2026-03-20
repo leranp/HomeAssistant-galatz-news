@@ -3,7 +3,6 @@ import logging
 import re
 
 import requests
-import cloudscraper
 
 DOMAIN = "galatz_news"
 _LOGGER = logging.getLogger(__name__)
@@ -93,23 +92,39 @@ def _get_kan_news_url():
 
     Returns the HLS stream URL (m3u8), or None on failure.
     """
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8",
+    }
     try:
-        scraper = cloudscraper.create_scraper(
-            browser={"browser": "chrome", "platform": "windows", "mobile": False}
-        )
-        response = scraper.get(
+        response = requests.get(
             "https://www.kan.org.il/radio/hourlynews.aspx",
-            headers={"Accept-Language": "he-IL,he;q=0.9"},
+            headers=headers,
             timeout=15,
         )
         response.raise_for_status()
-    except Exception as e:
+    except requests.RequestException as e:
         _LOGGER.error("Failed to fetch KAN news page: %s", e)
         return None
 
+    _LOGGER.debug(
+        "KAN page: status=%s length=%s", response.status_code, len(response.text)
+    )
+
     match = re.search(r'data-player-src="([^"]+)"', response.text)
     if not match:
-        _LOGGER.error("Could not find data-player-src in KAN page")
+        _LOGGER.error(
+            "Could not find data-player-src in KAN page "
+            "(status=%s, length=%s, snippet=%.200s)",
+            response.status_code,
+            len(response.text),
+            response.text,
+        )
         return None
 
     stream_url = match.group(1).replace("&amp;", "&")
