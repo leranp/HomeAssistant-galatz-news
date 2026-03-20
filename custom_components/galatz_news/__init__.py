@@ -4,10 +4,10 @@ import logging
 import re
 
 import cloudscraper
-import httpx
 from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.network import get_url
 
 DOMAIN = "galatz_news"
@@ -53,13 +53,15 @@ async def async_setup_entry(hass, entry):
             f"?awCollectionId=1111&ExternalId={date_hour}_News"
         )
         try:
-            async with httpx.AsyncClient(follow_redirects=False, timeout=10) as client:
-                r = await client.head(
-                    url,
-                    headers={"User-Agent": "Mozilla/5.0 (compatible; Rigor/1.0.0; http://rigor.com)"},
-                )
+            session = async_get_clientsession(hass, verify_ssl=True)
+            r = await session.head(
+                url,
+                headers={"User-Agent": "Mozilla/5.0 (compatible; Rigor/1.0.0; http://rigor.com)"},
+                allow_redirects=False,
+                timeout=10,
+            )
             redirect_url = r.headers.get("location", "")
-        except httpx.RequestError:
+        except Exception:
             _LOGGER.error("Failed to get Galatz news URL")
             return
 
