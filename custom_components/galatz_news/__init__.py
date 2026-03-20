@@ -1,10 +1,12 @@
 import datetime
 import logging
-import random
-import requests
 import re
 
+import requests
+import cloudscraper
+
 DOMAIN = "galatz_news"
+_LOGGER = logging.getLogger(__name__)
 
 
 def setup(hass, config):
@@ -14,136 +16,106 @@ def setup(hass, config):
         """Handle the service call."""
         media_player_entity_id = call.data.get("entity_id")
 
-        _LOGGER = logging.getLogger(__name__)  # Import _LOGGER here
+        now = datetime.datetime.now()
+        date_hour = now.strftime("%y%m%d-%H")
 
-        x = datetime.datetime.now()
-        Day = x.strftime("%d")
-        month = x.strftime("%m")
-        Year = x.strftime("%y")
-        Hour = x.strftime("%H")
-        UrlMp3 = ""
+        url = (
+            f"https://api.bynetcdn.com/Redirector/glz/{date_hour}_News/PD"
+            f"?awCollectionId=1111&ExternalId={date_hour}_News"
+        )
 
         headers = {
             "User-Agent": "Mozilla/5.0 (compatible; Rigor/1.0.0; http://rigor.com)"
         }
 
-        if int(Hour) < 10:
-            HourFix = str(Hour)
-            HourFix = HourFix.zfill(2)
-        else:
-            HourFix = Hour
-
-        # _LOGGER.error(HourFix)
-
-        Format = Year + month + Day + "-" + str(HourFix)
-
-        Text1 = "https://api.bynetcdn.com/Redirector/glz/"
-        Text2 = "_News/PD?awCollectionId=1111&amp;ExternalId="
-        Text3 = "_News"
-        url = Text1 + Format + Text2 + Format + Text3
-
         try:
-            r = requests.head(url, headers=headers)
-            GetUrl = r.headers["Location"]
-        except requests.ConnectionError:
-            _LOGGER.error("Failed to get the URL")
+            r = requests.head(url, headers=headers, timeout=10, allow_redirects=False)
+            redirect_url = r.headers.get("Location", "")
+        except requests.RequestException:
+            _LOGGER.error("Failed to get Galatz news URL")
+            return
 
-        if "not_found" in GetUrl:
-            _LOGGER.error("No Url was found")
-        elif "mp3" in GetUrl:
-            words = GetUrl.split("mp3")[0]
-            UrlMp3 = words + "mp3"
-            # _LOGGER.error(UrlMp3)
+        if "not_found" in redirect_url:
+            _LOGGER.error("No Galatz news URL was found for %s", date_hour)
+            return
 
-            # _LOGGER.error(media_player_entity_id)
-            service_data = {
+        if "mp3" not in redirect_url:
+            _LOGGER.error("Unexpected Galatz redirect URL: %s", redirect_url)
+            return
+
+        mp3_url = redirect_url.split("mp3")[0] + "mp3"
+        _LOGGER.debug("Playing Galatz news: %s", mp3_url)
+
+        hass.services.call(
+            "media_player",
+            "play_media",
+            {
                 "entity_id": media_player_entity_id,
-                "media_content_id": UrlMp3,
+                "media_content_id": mp3_url,
                 "media_content_type": "music",
-            }
-            # _LOGGER.error(service_data)
-            hass.services.call("media_player", "play_media", service_data)
+            },
+        )
 
     def play_kan_news_service(call):
         """Handle the service call."""
         media_player_entity_id = call.data.get("entity_id")
 
-        _LOGGER = logging.getLogger(__name__)  # Import _LOGGER here
-        
-        x = datetime.datetime.now()
-        Day = x.strftime("%d")
-        month = x.strftime("%m")
-        Year = x.strftime("%y")
-        Year2 = x.strftime("%Y")
-        Hour = x.strftime("%H")
-        Minute = x.strftime("%M")
+        stream_url = _get_kan_news_url()
+        if not stream_url:
+            _LOGGER.error("Could not retrieve KAN news stream URL")
+            return
 
+        _LOGGER.debug("Playing KAN news: %s", stream_url)
 
-        user_agents = [
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/110.0",
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0",
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
-          ]
-        random_user_agent = random.choice(user_agents)
-
-        session = requests.Session()
-
-        headers = {
-            'User-Agent': random_user_agent,
-	        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-
-        # Save Http Get Responed from the hourlynews Page to hourlynewsHTML.txt file
-        response = session.get("https://www.kan.org.il/radio/hourlynews.aspx", headers=headers)
-
-        with open("/hourlynewsHTML.txt", "w", encoding="utf8") as f:
-            f.write(response.text)
-
-        # Take the entryId and Hour values from the hourlynewsHTML.txt file
-        try:
-            with open('/hourlynewsHTML.txt', encoding="utf8") as myfile:
-                content = myfile.read()
-                entryId = re.search(r'entryId/(.*?)\/format',
-                            content, re.DOTALL).group(1)
-                hour = re.search(r'<span class="title player-title">(\d{2}:\d{2})</span>',
-                         content, re.DOTALL).group(1)
-        except AttributeError:
-            entryId = "not_found"
-            hour = "not_found"
-
-        # Create the Url for the next HTTP request
-        Url = "https://cdnapisec.kaltura.com/html5/html5lib/v2.92/mwEmbedFrame.php/p/2717431/uiconf_id/47265863/entry_id/" + \
-            entryId+"?wid=_2717431&iframeembed=true&playerId=kaltura_player_1615983371&entry_id=value"
-
-        # Save Http Get Responed from the Secound Page to response2.txt file
-        response2 = requests.get(Url)
-        with open("/response2.txt", "w", encoding="utf8") as f:
-            f.write(response2.text)
-
-        # Take the flavorId value from the response2.txt file
-        try:
-            with open('/response2.txt', encoding="utf8") as myfile:
-                content = myfile.read()
-                flavorId = re.search(r'containerFormat":"mp3","videoCodecId":null,"status":2,"id":"(.*?)\","entryId',
-                                     content, re.DOTALL).group(1)
-                Url = "https://vod.media.kan.org.il/pd/p/2717431/sp/271743100/serveFlavor/entryId/" + \
-                   entryId+"/v/1/ev/3/flavorId/"+flavorId+"/name/a.mp3"
-                _LOGGER.error(Url)
-
-                service_data = {
-                   "entity_id": media_player_entity_id,
-                   "media_content_id": Url,
-                   "media_content_type": "music",
-                   }
-                hass.services.call("media_player", "play_media", service_data)
-        except AttributeError:
-            flavorId = "not_found"
-            _LOGGER.error("not_found")
-
-
+        hass.services.call(
+            "media_player",
+            "play_media",
+            {
+                "entity_id": media_player_entity_id,
+                "media_content_id": stream_url,
+                "media_content_type": "music",
+            },
+        )
 
     hass.services.register(DOMAIN, "play_galatz_news", play_galatz_news_service)
     hass.services.register(DOMAIN, "play_kan_news", play_kan_news_service)
 
-    # Return boolean to indicate that initialization was successful.
     return True
+
+
+def _get_kan_news_url():
+    """
+    Fetch the latest hourly news stream URL from KAN radio.
+
+    KAN's website is protected by Cloudflare, which blocks plain HTTP requests.
+    cloudscraper bypasses this protection and retrieves the full server-rendered
+    HTML, which contains the stream URL in a `data-player-src` attribute.
+
+    Returns the HLS stream URL (m3u8), or None on failure.
+    """
+    try:
+        scraper = cloudscraper.create_scraper(
+            browser={"browser": "chrome", "platform": "windows", "mobile": False}
+        )
+        response = scraper.get(
+            "https://www.kan.org.il/radio/hourlynews.aspx",
+            headers={"Accept-Language": "he-IL,he;q=0.9"},
+            timeout=15,
+        )
+        response.raise_for_status()
+    except Exception as e:
+        _LOGGER.error("Failed to fetch KAN news page: %s", e)
+        return None
+
+    match = re.search(r'data-player-src="([^"]+)"', response.text)
+    if not match:
+        _LOGGER.error("Could not find data-player-src in KAN page")
+        return None
+
+    stream_url = match.group(1).replace("&amp;", "&")
+
+    # פרוטוקול יחסי (//...) — הוסף https:
+    if stream_url.startswith("//"):
+        stream_url = "https:" + stream_url
+
+    return stream_url
